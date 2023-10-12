@@ -54,8 +54,8 @@ __all__ = ["typing", "include_local_file", "Type_T", "init_global_config",  # no
            "is_case_sensitive_dir", "replace_one", "cached_property", "remove_prefix",  # no-combine
            "remove_duplicates", "remove_tuple_duplicates"]  # no-combine
 
-if sys.version_info < (3, 6, 0):
-    sys.exit("This script requires at least Python 3.6.0")
+if sys.version_info < (3, 8, 0):   # noqa: UP036
+    sys.exit("This script requires at least Python 3.8.0")
 
 Type_T = typing.TypeVar("Type_T")
 
