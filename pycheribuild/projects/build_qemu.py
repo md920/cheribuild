@@ -397,6 +397,27 @@ class BuildQEMU(BuildQEMUBase):
                                 *self.config.morello_sdk_dir.rglob("share/icons/**/qemu.svg"))
 
 
+class BuildLinuxUserQEMU(BuildQEMUBase):
+    repository = GitRepository("https://github.com/CTSRD-CHERI/qemu.git",
+                               default_branch="qemu-cheri-bsd-user",
+                               force_branch=True)
+    native_install_dir = DefaultInstallDir.BSD_USER_SDK
+    default_targets = "aarch64-linux-user,morello-linux-user" 
+    default_use_smbd = False
+    target = "linux-user-qemu"
+    hide_options_from_help = True
+
+    def setup(self):
+        super().setup()
+        # Disable capstone disassembler unsupporting CHERI instructions.
+        self.configure_args.append("--disable-capstone")
+        # Disable RVFI-DDI unsupported in the user mode.
+        self.configure_args.append("--disable-rvfi-dii")
+        # Enable to build Linux user mode targets.
+        self.configure_args.append("--enable-linux-user")
+        # Build a static binary that can be easily included in a guest jail.
+        self.configure_args.append("--static")
+
 class BuildBsdUserQEMU(BuildQEMUBase):
     repository = GitRepository("https://github.com/CTSRD-CHERI/qemu.git",
                                default_branch="qemu-cheri-bsd-user",
@@ -406,7 +427,7 @@ class BuildBsdUserQEMU(BuildQEMUBase):
     default_use_smbd = False
     target = "bsd-user-qemu"
     hide_options_from_help = True
-
+  
     @classmethod
     def qemu_cheri_binary(cls, caller: SimpleProject, xtarget: CrossCompileTarget = None, absolute_path=True):
         if xtarget is None:
@@ -419,7 +440,6 @@ class BuildBsdUserQEMU(BuildQEMUBase):
             return caller.config.bsd_user_qemu_bindir / os.getenv("QEMU_BSD_USER_PATH", binary_name)
         else:
             return binary_name
-
     def setup(self):
         super().setup()
         # Disable capstone disassembler unsupporting CHERI instructions.

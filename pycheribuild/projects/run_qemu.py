@@ -37,7 +37,7 @@ from enum import Enum
 from pathlib import Path
 from typing import Optional
 
-from .build_qemu import BuildBsdUserQEMU, BuildQEMU, BuildQEMUBase, BuildUpstreamQEMU
+from .build_qemu import BuildBsdUserQEMU, BuildLinuxUserQEMU, BuildQEMU, BuildQEMUBase, BuildUpstreamQEMU
 from .cherios import BuildCheriOS
 from .cross.cheribsd import BuildCHERIBSD, BuildCheriBsdMfsKernel, BuildFreeBSD, ConfigPlatform, KernelABI
 from .cross.gdb import BuildGDB
